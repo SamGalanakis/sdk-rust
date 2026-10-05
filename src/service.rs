@@ -38,6 +38,18 @@ impl ServiceDefinition {
         self.discovery.apply_options(options);
         self
     }
+
+    /// The name this definition is registered under, as it will appear in discovery.
+    pub fn name(&self) -> &crate::discovery::ServiceName {
+        &self.discovery.name
+    }
+
+    /// Register this definition under `name` instead of its declared name, keeping its
+    /// handlers, dispatcher and options. Lets a host namespace a generated service.
+    pub fn with_name(mut self, name: crate::discovery::ServiceName) -> Self {
+        self.discovery.name = name;
+        self
+    }
 }
 
 /// Anything that can be turned into a [`ServiceDefinition`] for

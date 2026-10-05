@@ -311,3 +311,17 @@ fn generated_ingress_clients_have_typed_natural_apis() {
     let restricted = RestrictedIngressClient::from_client(client);
     let _: restate_sdk::ingress::Request<MacroTestExecutor, (), ()> = restricted.ping();
 }
+
+#[test]
+fn a_service_definition_reports_and_replaces_its_registered_name() {
+    use restate_sdk::discovery::ServiceName;
+    use restate_sdk::service::IntoServiceDefinition;
+
+    let definition = MySvc.into_service_definition();
+    let declared = definition.name().to_string();
+    assert_eq!(declared, "ParityService");
+
+    let renamed =
+        definition.with_name(ServiceName::try_from("host.ParityService".to_string()).unwrap());
+    assert_eq!(renamed.name().to_string(), "host.ParityService");
+}
